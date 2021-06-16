@@ -22,7 +22,7 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 |----|----|
 |NTU RGB+D dataset|![dataset](./github/dataset.png)|
 |Model architecture|![model](./github/model.png)|
-Basically, there are 2x2 combination ways between the Spatial RNN and Temporal RNN, which are `Chain + Stacked`, `Traversal + Stacked`, `Chain + Hierarchical`, `Traversal +  Hierarchical`. See codes down below in the model.py and you will know how to combine them
+`Basically, there are 2x2 combination ways between the Spatial RNN and Temporal RNN, which are `Chain + Stacked`, `Traversal + Stacked`, `Chain + Hierarchical`, `Traversal +  Hierarchical`. See codes down below in the model.py and you will know how to combine them`
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
