@@ -10,7 +10,7 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 ## Realesed Part
 |Part|Time|Description|
 |----|----|----|
-|model|6/16|[the initial version of the model]|
+|model|6/16|[the initial version of the model](./model.py)|
 
 # model
 
