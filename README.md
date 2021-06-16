@@ -17,7 +17,8 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 
 ****
 # model
-due to the limitation of time, we will only train on __NTU RGB+D dataset__ . 25 joints are labeled for each person, and the original paper only have 20 joints for each skeleton, so the architecture of the two rnn have been modeified to fit the dataset. Check the code for details.
+`due to the limitation of time, we will only train on __NTU RGB+D dataset__ . 25 joints are labeled for each person, and the original paper only have 20 joints for each skeleton, so the architecture of the two rnn have been modeified to fit the dataset. Check the code for details.
+|😃|😄|
 |----|----|
 |NTU RGB+D dataset||
 |Model architecture||
