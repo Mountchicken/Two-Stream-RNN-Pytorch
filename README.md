@@ -33,7 +33,7 @@ Basically, there are 2x2 combination ways between the Spatial RNN and Temporal R
 #### Dataset decomposition
 - Put the dataset file with the code and run [conver_data.py](./convert_data.py). If any errors occur, check the code from line 111 to line 113 and you may
 change the data path. This Process should take at least 1 hour I guess?. You can go to play games now😉
-- Then when you successfully decomposed the dataset file. It should generat a file named `NTU-RGB-D' which consist of two subfiles named
+- Then when you successfully decomposed the dataset file. It should generat a file named `NTU-RGB-D` which consist of two subfiles named
 `xsub` and `xview`. There are three .npy and .pkl files in each of them.
 - Finaly, build your dataloader like this
 ```python
