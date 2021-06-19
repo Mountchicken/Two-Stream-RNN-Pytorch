@@ -13,9 +13,10 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 ## Realesed Part
 |Part|Time|Description|
 |----|----|----|
-|model|6/16|[the initial version of the model](./model.py)|
-|||dd|
+|model|6/16|[***~~the initial version of the model~~***](./model.py)|
+||6/19|[the fixed version of the model](./model.py)|
 |dataset|6/18|[How to creat dataloader from downloding to implementation](#dataset)|
+|train|6/19|[It's time to burn your gpu now my friend](#train)|
 ****
 ### model
 due to the limitation of time, we will only train on __NTU RGB+D dataset__ . 25 joints are labeled for each person, and the original paper only have 20 joints for each skeleton, so the architecture of the two rnn have been modeified to fit the dataset. Check the code for details.
