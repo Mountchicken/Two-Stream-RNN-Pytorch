@@ -14,6 +14,7 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 |Part|Time|Description|
 |----|----|----|
 |model|6/16|[the initial version of the model](./model.py)|
+|||dd|
 |dataset|6/18|[How to creat dataloader from downloding to implementation](#dataset)|
 ****
 ### model
