@@ -40,18 +40,19 @@ def reshape(x,type,order=None):
     # Spatial RNN
     elif type == 'chain':
         #对于chain,[B,3,100,25,2] --> [2,B,3*25,100] 25个点的顺序按照chain模式打乱
-        x_reshaped = einops.rearrange(x[:,:,:,order,:],'B A T J P -> P B T (A J)')
+        x_reshaped = einops.rearrange(x[:,:,:,order,:],'B A T J P -> P B (A J) T')
     elif type == 'traversal':
         #对于traversal, [B,3,100,25,2] --> [2,B,3*47,100] traversal顺序较为特殊，会重复
-        x_reshaped = torch.ones((x.shape[0],x.shape[1],x.shape[2],len(order),x.shape[4])) #[B,3,100,47,2]
+        x_reshaped = torch.ones((x.shape[0],x.shape[1],x.shape[2],len(order),x.shape[4])).to('cuda') #[B,3,100,47,2]
         for idx, ord in enumerate(order):
-            x_reshaped[:,:,:,idx] = x[:,:,:,ord]
-        x_reshaped = einops.rearrange(x_reshaped,'B A T J P -> P B T (A J)')
+            x_reshaped[:,:,:,idx,:] = x[:,:,:,ord,:]
+        x_reshaped = einops.rearrange(x_reshaped,'B A T J P -> P B (A J) T ')
 
     return x_reshaped
 
 
 class temporal_rnn(nn.Module):
+
     def __init__(self,order,num_classes,type='hierarchical_rnn'):
         super().__init__()
         self.type = type
@@ -73,7 +74,8 @@ class temporal_rnn(nn.Module):
             # concat 演着joints维度进行拼接
             self.rnn2 = nn.LSTM(128*5,512,batch_first=True)
 
-        self.fc = nn.Linear(512,num_classes)
+        self.fc = nn.Linear(512*100,num_classes)
+        nn.init.normal_(self.fc.weight,0,1)
 
     def forward(self,x):
         # x shape [B,3,100,25,2]
@@ -85,6 +87,7 @@ class temporal_rnn(nn.Module):
                 single_list.append(idx)
             else:
                 double_list.append(idx)
+
         if self.type == 'hierarchical_rnn' :
             # 此情况x_reshaped为列表，其中五个元素对应第一层rnn的五组输入
             x_reshaped = reshape(x,'hierarchical_rnn',self.order) #[B,3,100,25,2]-->5*[2,B,100,3*5]
@@ -98,21 +101,25 @@ class temporal_rnn(nn.Module):
             x_out1 = torch.cat(x_out1,dim=2) # [B,100,128] -> [B,100,128*5]
             x_out2 = torch.cat(x_out2,dim=2) # [B,100,128] -> [B,100,128*5]
             #第二层rnn + linear
-            x_out1 = self.fc(self.rnn2(x_out1)[0][:,-1,:]) #[B,100,128*5] -> [B, num_classes]
-            x_out2 = self.fc(self.rnn2(x_out2)[0][:,-1,:]) #[B,100,128*5] -> [B, num_classes]
+            #x_out1 = self.fc(self.rnn2(x_out1)[0][:,-1,:]) #[B,100,128*5] -> [B, num_classes]
+            x_out1 = self.fc(self.rnn2(x_out1)[0].reshape(x.shape[0],-1))
+            #x_out2 = self.fc(self.rnn2(x_out2)[0][:,-1,:]) #[B,100,128*5] -> [B, num_classes]
+            x_out2 = self.fc(self.rnn2(x_out2)[0].reshape(x.shape[0],-1))
 
         elif self.type == 'stacked_rnn' :
 
             x_reshaped = reshape(x,'stacked_rnn',self.order)  #[B,3,100,25,2]--> [2,B,100,3*25]
 
-            x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0][:,-1,:])
-            x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0][:,-1,:])
+            #x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0][:,-1,:])
+            x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0].reshape(x.shape[0],-1))
+            #x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0][:,-1,:])
 
         #单人动作直接输出，双人动作要取均值
         for idx in single_list:
             x_out2[idx,:] = x_out1[idx,:]
 
-        return (F.softmax(x_out1,1) + F.softmax(x_out2,1)) / 2
+        return (F.log_softmax(x_out1,1) + F.log_softmax(x_out2,1)) / 2
+        #return F.log_softmax(x_out1,1)
 
 
 class spatial_rnn(nn.Module):
@@ -121,10 +128,11 @@ class spatial_rnn(nn.Module):
         self.type = type
         self.order = order
         assert type in ['chain', 'traversal'] # 两种不同的spatial_rnn
-        self.rnn1 = nn.LSTM(len(order)*3, 512,batch_first=True)
+        self.rnn1 = nn.LSTM(100,512,batch_first=True)
         self.rnn2 = nn.LSTM(512,512,batch_first=True)
-        self.fc = nn.Linear(512,num_classes)
-
+        self.fc = nn.Linear(512*len(order)*3,num_classes)
+        nn.init.normal_(self.fc.weight,0,1)
+        
     def forward(self,x):
         # 首先找出一个batch里面哪些是单人动作，哪些是双人动作,默认单人的情况下x[:,:,:,:,1]全为0
         single_list = []
@@ -135,13 +143,16 @@ class spatial_rnn(nn.Module):
             else:
                 double_list.append(idx)
         x_reshaped = reshape(x, self.type, self.order)
-        x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0][:,-1,:])
-        x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0][:,-1,:])
+        #x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0][:,-1,:])
+        x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0].reshape(x.shape[0],-1))
+        #x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0][:,-1,:])
+        x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0].reshape(x.shape[0],-1))
 
         for idx in single_list:
             x_out2[idx,:] = x_out1[idx,:]
 
-        return (F.softmax(x_out1,1) + F.softmax(x_out2,1)) / 2
+        return (F.log_softmax(x_out1,1) + F.log_softmax(x_out2,1)) / 2
+        #return F.log_softmax(x_out1,1)
 
 
 class two_stream_rnn(nn.Module):
@@ -164,16 +175,19 @@ class two_stream_rnn(nn.Module):
         spatial_score = self.spatial_rnn(x)
         temporal_score = self.temporal_rnn(x)
         total_score = temporal_score * self.w + spatial_score* (1 - self.w)
+        
 
-        return total_score
+        return total_score 
 
 if __name__ == "__main__":
-    x = torch.ones(10,3,100,25,2)
+    x = torch.rand(10,3,100,25,2).to('cuda')
+    label = torch.Tensor([1,2,3,4,5,6,7,8,9,10]).to('cuda')
+    criterion = nn.NLLLoss()
     """temporal rnn"""
     temporal_type = 'hierarchical_rnn'
     #temporal_type = 'stacked_rnn'
     stacked_rnn_order = None
-    hierachical_rnn_order = [[8,9,19,11,23,24], #左臂 6点
+    hierachical_rnn_order = [[8,9,10,11,23,24], #左臂 6点
                       [4,5,6,7,21,22], # 右臂 6点
                       [3,2,20,1,0], #躯干 5点
                       [16,17,18,19],#左腿 4点
@@ -189,7 +203,7 @@ if __name__ == "__main__":
                             ] # 47 joints
     chain_rnn_order = [23,24,11,10,9,8,20,4,5,6,7,21,22, #①
                         3,2,20,1,0, #②
-                        19,18,17,16,12,13,14,15 ] #③
+                        19,18,17,16,0,12,13,14,15 ] #③
     num_classes = 60
     model = two_stream_rnn(
                             temporal_order = hierachical_rnn_order,
@@ -197,8 +211,10 @@ if __name__ == "__main__":
                             spatial_order = traversal_rnn_order,
                             spatial_type = spatial_type,
                             num_classes = num_classes
-                            )
+                            ).to('cuda')
     pred = model(x)
+    loss = criterion(pred,label.long())
+    loss.backward()
     print(pred.shape)
 
 
