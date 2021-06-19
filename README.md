@@ -59,11 +59,9 @@ loader = torch.utils.data.DataLoader(
 ****
 ### train
 #### Set up training hyperparameters
-
-
-
-
-
+- Sorry for my messy training code. In `train.py` from line 35 to line 37, there are some basic Hyperparameters to modify. You can simply just use mine.
+- In `train.py` from line 84 to line 111, you can choose the different conbination of the two stream model. It will be easy to understand if you had checked the paper
+****
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
