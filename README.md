@@ -57,6 +57,13 @@ loader = torch.utils.data.DataLoader(
     num_workers=8, pin_memory=True)
 ```
 ****
+### train
+#### Set up training hyperparameters
+
+
+
+
+
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
