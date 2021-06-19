@@ -26,7 +26,7 @@ due to the limitation of time, we will only train on __NTU RGB+D dataset__ . 25 
 |Model architecture|![model](./github/model.png)|
 ****
 Basically, there are 2x2 combination ways between the Spatial RNN and Temporal RNN, which are `Chain + Stacked`, `Traversal + Stacked`, `Chain + Hierarchical`, `Traversal +  Hierarchical`. See codes down below in the [model.py](./model.py) and you will know how to combine them
-- **Hot Issue 6/17** I tried to train this model but find the loss won't drop. Some bugs exist. Yet still the model code should be correct mostly😐
+- ***~~**Hot Issue 6/17** I tried to train this model but find the loss won't drop. Some bugs exist. Yet still the model code should be correct mostly😐~~** [Fixed]
 ****
 ### dataset
 #### Downloading the dataset
