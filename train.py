@@ -33,8 +33,8 @@ def test(network,testloader,criterion):
 def train():
     # Hyperparameters:
     batch_size = 256
-    learning_rate = 0.01
-    num_epochs = 80
+    learning_rate = 0.02
+    num_epochs = 300
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load Trainset
@@ -113,6 +113,7 @@ def train():
 
     optimizer = optim.Adam(network.parameters(), lr=learning_rate)
     criterion = nn.NLLLoss()
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,milestones=[100,160,220],gamma=0.1)
     comment=f'TwoStreamRNN batch_size={batch_size} lr={learning_rate} device={device}'
     tb=SummaryWriter(comment=comment)
 
@@ -128,9 +129,9 @@ def train():
             preds = network(images)
             loss = criterion(preds, labels)
             loss.backward()
-            for group in optimizer.param_groups:
-                for param in group['params']:
-                    param.grad.data.clamp_(-5,5)
+            # for group in optimizer.param_groups:
+            #     for param in group['params']:
+            #         param.grad.data.clamp_(-5,5)
             optimizer.step()
             train_loss += loss.item()
             train_correct += preds.argmax(dim=1).eq(labels).sum().item()
@@ -145,7 +146,7 @@ def train():
         tb.add_scalar('Accuracy on Trainset',trainset_acc,epoch)
         tb.add_scalar('Test Loss',test_avg_loss,epoch)
         tb.add_scalar('Accuracy on Testset',testset_acc,epoch)
-
+        scheduler.step()
         '''只保存测试集准确率不断上升的epoch'''
         if testset_acc > best_acc:
             torch.save(network.state_dict(),'./best_model.pt')
