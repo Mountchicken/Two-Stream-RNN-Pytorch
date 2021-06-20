@@ -68,10 +68,10 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 #### 6/20
 |Model ARC|traversal+hierachical|
 |Training HyperParams|Batch_size=256, learning_rate=0.001, num_epochs=300, optimizer=Adam, scheduler=MultiStep([100,160,220],0.5)|
-|Train Acc|![dataset](./github/acctrain1.png)|
-|Train loss|![dataset](./github/losstrain1.png)|
-|Test Acc|![dataset](./github/acctest1.png)|
-|Test loss|![dataset](./github/losstest1.png)|
+|Train Acc|![dataset](./github/acctrain1.JPG)|
+|Train loss|![dataset](./github/losstrain1.JPG)|
+|Test Acc|![dataset](./github/acctest1.JPG)|
+|Test loss|![dataset](./github/losstest1.JPG)|
 |Checkpoint||
 |Recommendation|more epochs between each drop of learning rate|
 # Email Address
