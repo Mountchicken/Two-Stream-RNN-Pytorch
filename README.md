@@ -66,6 +66,8 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 ****
 ### checkpoint
 #### 6/20
+|😀|😀|
+|----|----|
 |Model ARC|traversal+hierachical|
 |Training HyperParams|Batch_size=256, learning_rate=0.001, num_epochs=300, optimizer=Adam, scheduler=MultiStep([100,160,220],0.5)|
 |Train Acc|![dataset](./github/acctrain1.JPG)|
