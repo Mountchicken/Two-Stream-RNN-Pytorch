@@ -74,7 +74,7 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 |Train loss|![dataset](./github/losstrain1.JPG)|
 |Test Acc|![dataset](./github/acctest1.JPG)|
 |Test loss|![dataset](./github/losstest1.JPG)|
-|Checkpoint||
+|Checkpoint|Will be released|
 |Recommendation|more epochs between each drop of learning rate|
 # Email Address
 email me if you have any emergency issue
