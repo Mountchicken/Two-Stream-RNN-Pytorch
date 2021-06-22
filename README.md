@@ -91,7 +91,7 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 |Test loss|![dataset](./github/losstest2.JPG)|
 |Checkpoint|Will be released|
 |Recommendation|The choose of initial Learning rate is important |
-####6/21
+
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
