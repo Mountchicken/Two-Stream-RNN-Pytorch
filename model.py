@@ -75,18 +75,11 @@ class temporal_rnn(nn.Module):
             self.rnn2 = nn.LSTM(128*5,512,batch_first=True)
 
         self.fc = nn.Linear(512*100,num_classes)
-        nn.init.normal_(self.fc.weight,0,1)
-
+        nn.init.kaiming_normal_(self.fc.weight)
     def forward(self,x):
         # x shape [B,3,100,25,2]
         # 首先找出一个batch里面哪些是单人动作，哪些是双人动作,默认单人的情况下x[:,:,:,:,1]全为0
-        single_list = []
-        double_list = []
-        for idx in range(x.shape[0]):
-            if sum(sum(sum(x[idx,:,:,:,1]))) == 0:
-                single_list.append(idx)
-            else:
-                double_list.append(idx)
+
 
         if self.type == 'hierarchical_rnn' :
             # 此情况x_reshaped为列表，其中五个元素对应第一层rnn的五组输入
@@ -113,13 +106,10 @@ class temporal_rnn(nn.Module):
             #x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0][:,-1,:])
             x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0].reshape(x.shape[0],-1))
             #x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0][:,-1,:])
+            x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0].reshape(x.shape[0],-1))
 
-        #单人动作直接输出，双人动作要取均值
-        for idx in single_list:
-            x_out2[idx,:] = x_out1[idx,:]
 
         return (F.log_softmax(x_out1,1) + F.log_softmax(x_out2,1)) / 2
-        #return F.log_softmax(x_out1,1)
 
 
 class spatial_rnn(nn.Module):
@@ -130,30 +120,20 @@ class spatial_rnn(nn.Module):
         assert type in ['chain', 'traversal'] # 两种不同的spatial_rnn
         self.rnn1 = nn.LSTM(100,512,batch_first=True)
         self.rnn2 = nn.LSTM(512,512,batch_first=True)
-        self.fc = nn.Linear(512*len(order)*3,num_classes)
-        nn.init.normal_(self.fc.weight,0,1)
+        self.fc = nn.Linear(512*3*len(order),num_classes)
+        nn.init.kaiming_normal_(self.fc.weight)
+
         
     def forward(self,x):
         # 首先找出一个batch里面哪些是单人动作，哪些是双人动作,默认单人的情况下x[:,:,:,:,1]全为0
-        single_list = []
-        double_list = []
-        for idx in range(x.shape[0]):
-            if sum(sum(sum(x[idx,:,:,:,1]))) == 0:
-                single_list.append(idx)
-            else:
-                double_list.append(idx)
+
         x_reshaped = reshape(x, self.type, self.order)
         #x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0][:,-1,:])
         x_out1 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0].reshape(x.shape[0],-1))
         #x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0][:,-1,:])
-        x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[0])[0])[0].reshape(x.shape[0],-1))
+        x_out2 = self.fc(self.rnn2(self.rnn1(x_reshaped[1])[0])[0].reshape(x.shape[0],-1))
 
-        for idx in single_list:
-            x_out2[idx,:] = x_out1[idx,:]
-
-        return (F.log_softmax(x_out1,1) + F.log_softmax(x_out2,1)) / 2
-        #return F.log_softmax(x_out1,1)
-
+        return (F.log_softmax(x_out1,1) + F.log_softmax(x_out2,1))/2
 
 class two_stream_rnn(nn.Module):
     def __init__(self,temporal_order,temporal_type,spatial_order,spatial_type,num_classes,w=0.9):
@@ -177,7 +157,8 @@ class two_stream_rnn(nn.Module):
         total_score = temporal_score * self.w + spatial_score* (1 - self.w)
         
 
-        return total_score 
+        return total_score
+ 
 
 if __name__ == "__main__":
     x = torch.rand(10,3,100,25,2).to('cuda')
