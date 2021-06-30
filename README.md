@@ -105,7 +105,7 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 ###### Training results
 |😲|😲|😲|😲|
 |----|----|----|----|
-|Train Acc|![trainacc](./github/trainacc1.png)|Train Loss|![trainloss(./github/trainloss1.png)|
+|Train Acc|![trainacc](./github/trainacc1.png)|Train Loss|![trainloss](./github/trainloss1.png)|
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
