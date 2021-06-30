@@ -95,13 +95,17 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 - No longer exists, like tears in the rain
 #### 6/30
 ##### Architecture: Two-Stream RNN
+###### Training parameters
 |😀|😀|😀|😀|
 |----|----|----|----|
 |Batch size|512|optimizer|Adam|
 |Learning rate|3e-4|Scheduler|MultiStep[15,30]|
 |Epochs|50||Device|GTX 2080Ti|
 |3D transform|No|NTU RGB+D|Cross subject|
-
+###### Training results
+|😲|😲|😲|😲|
+|----|----|----|----|
+|Train Acc|![trainacc](./github/trainacc1.png)|Train Loss|![trainloss(./github/trainloss1.png)|
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
