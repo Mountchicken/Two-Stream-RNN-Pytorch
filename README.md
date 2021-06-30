@@ -90,9 +90,9 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 ****
 ### checkpoint
 #### 6/20
--No longer exists, like tears in the rain
+- No longer exists, like tears in the rain
 #### 6/22
--No longer exists, like tears in the rain
+- No longer exists, like tears in the rain
 ### 6/30
 
 # Email Address
