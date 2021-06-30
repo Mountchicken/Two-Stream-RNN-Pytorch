@@ -95,6 +95,7 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 - No longer exists, like tears in the rain
 #### 6/30
 ##### Architecture: Two-Stream RNN
+|😀|😀|😀|😀|
 |----|----|----|----|
 |Batch size|512|optimizer|Adam|
 |Learning rate|3e-4|Scheduler|MultiStep[15,30]|
