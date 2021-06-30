@@ -14,13 +14,13 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 |Part|Time|Description|
 |----|----|----|
 |model|6/16|[***~~the initial version of the model~~***](./model.py)|
-||6/19|[the fixed version of the model](./model.py)|
+||6/19|[***~~the fixed version of the model~~***](./model.py)|
 ||6/30|[the final version of the model](./model.py)|
 |dataset|6/18|[How to creat dataloader from downloding to implementation](#dataset)|
 |train|6/19|[It's time to burn your gpu now my friend](#train)|
 ||6/30|[Fixed a bunch of bugs and can work fine now|(#train)|
-|checkpoint|6/20|[First checkpoint](#checkpoint)|
-||6/22|[Second checkpoint](#checkpoint)|
+|checkpoint|6/20|***~[First checkpoint](#checkpoint)~***|
+||6/22|***~~[Second checkpoint](#checkpoint)~~***|
 ||6/30|[Fix bugs](#checkpoint)|
 ****
 ### model
@@ -61,6 +61,26 @@ loader = torch.utils.data.DataLoader(
     shuffle=True,
     num_workers=8, pin_memory=True)
 ```
+#### 3D Transforms
+```python
+data_path = "NTU-RGB-D/xview/val_data.npy"
+    label_path = "NTU-RGB-D/xview/val_label.pkl"
+    num_frame_path = "NTU-RGB-D/xview/val_num_frame.npy"
+    dataset = Feeder(data_path, label_path, num_frame_path,random_valid_choose=False,
+                     random_shift=True,
+                     random_move=True,
+                     random_rotate=0.2,
+                     window_size=100,
+                     normalization=True,
+                     debug=False,
+                     origin_transfer=False)
+                     
+loader = torch.utils.data.DataLoader(
+    dataset=dataset,
+    batch_size=1,
+    shuffle=True,
+    num_workers=8, pin_memory=True)
+```
 ****
 ### train
 #### Set up training hyperparameters
@@ -70,30 +90,8 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 ****
 ### checkpoint
 #### 6/20
-|😀|😀|
-|----|----|
-|Model ARC|traversal+hierachical|
-|Highest Test Accuracy|25%|
-|Training HyperParams|Batch_size=256, learning_rate=0.001, num_epochs=300, optimizer=Adam, scheduler=MultiStep([100,160,220],0.5)|
-|Train Acc|![dataset](./github/acctrain1.JPG)|
-|Train loss|![dataset](./github/losstrain1.JPG)|
-|Test Acc|![dataset](./github/acctest1.JPG)|
-|Test loss|![dataset](./github/losstest1.JPG)|
-|Checkpoint|Will be released|
-|Recommendation|more epochs between each drop of learning rate|
-****
 #### 6/22
-|😀|😀|
-|----|----|
-|Model ARC|traversal+hierachical|
-|Highest Test Accuracy|40.12%|
-|Training HyperParams|Batch_size=256, learning_rate=0.001, num_epochs=1000, optimizer=Adam, scheduler=MultiStep([300，600，820],0.5)|
-|Train Acc|![dataset](./github/acctrain2.JPG)|
-|Train loss|![dataset](./github/losstrain2.JPG)|
-|Test Acc|![dataset](./github/acctest2.JPG)|
-|Test loss|![dataset](./github/losstest2.JPG)|
-|Checkpoint|Will be released|
-|Recommendation|The choose of initial Learning rate is important |
+### 6/30
 
 # Email Address
 email me if you have any emergency issue
