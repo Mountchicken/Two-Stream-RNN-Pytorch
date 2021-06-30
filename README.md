@@ -95,17 +95,30 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 - No longer exists, like tears in the rain
 #### 6/30
 ##### Architecture: Two-Stream RNN
-###### Training parameters
+###### Training parameters1(Cross Subject)
 |😀|😀|😀|😀|
 |----|----|----|----|
 |Batch size|512|optimizer|Adam|
 |Learning rate|3e-4|Scheduler|MultiStep[15,30]|
 |Epochs|50||Device|GTX 2080Ti|
 |3D transform|No|NTU RGB+D|Cross subject|
-###### Training results
+###### Training results1
 |😲|😲|😲|😲|
 |----|----|----|----|
-|Train Acc|![trainacc](./github/trainacc1.png)|Train Loss|![trainloss](./github/trainloss1.png)|
+|Train ACC(98.46%)|![trainacc](./github/trainacc1.png)|Train Loss|![trainloss](./github/trainloss1.png)|
+|Test ACC(72.28%)|![testacc](./github/testacc1.png)|Test Loss|![testloss](./github/testloss1.png)|
+###### Training parameters2(Cross Subject with 3D transform)
+|😀|😀|😀|😀|
+|----|----|----|----|
+|Batch size|512|optimizer|Adam|
+|Learning rate|3e-4|Scheduler|MultiStep[15,30]|
+|Epochs|50||Device|GTX 2080Ti|
+|3D transform|Yes|NTU RGB+D|Cross subject|
+###### Training results2
+|😲|😲|😲|😲|
+|----|----|----|----|
+|Train ACC(87.88%)|![trainacc](./github/trainacc2.png)|Train Loss|![trainloss](./github/trainloss2.png)|
+|Test ACC(73.45%)|![testacc](./github/testacc2.png)|Test Loss|![testloss](./github/testloss2.png)|
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
