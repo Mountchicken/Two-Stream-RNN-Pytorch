@@ -120,7 +120,30 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 |----|----|----|----|
 |Train ACC(87.88%)|![trainacc](./github/trainacc2.png)|Train Loss|![trainloss](./github/trainloss2.png)|
 |Test ACC(73.45%)|![testacc](./github/testacc2.png)|Test Loss|![testloss](./github/testloss2.png)|
-##### Architecture: Spatial RNN
+###### Training parameters3(Cross View without 3D transform)
+|😀|😀|😀|😀|
+|----|----|----|----|
+|Batch size|512|optimizer|Adam|
+|Learning rate|3e-4|Scheduler|MultiStep[15,30]|
+|Epochs|50||Device|GTX 2080Ti|
+|3D transform|No|NTU RGB+D|Cross View|
+###### Training results3
+|😲|😲|😲|😲|
+|----|----|----|----|
+|Train ACC(95.64%)|![trainacc](./github/trainacc5.png)|Train Loss|![trainloss](./github/trainloss5.png)|
+|Test ACC(82.57%)|![testacc](./github/testacc5.png)|Test Loss|![testloss](./github/testloss5.png)|
+###### Training parameters4(Cross Subject with 3D transform)
+|😀|😀|😀|😀|
+|----|----|----|----|
+|Batch size|512|optimizer|Adam|
+|Learning rate|3e-4|Scheduler|MultiStep[15,30]|
+|Epochs|50||Device|GTX 2080Ti|
+|3D transform|Yes|NTU RGB+D|Cross View|
+###### Training results4
+|😲|😲|😲|😲|
+|----|----|----|----|
+|Train ACC(87.88%)|![trainacc](./github/trainacc6.png)|Train Loss|![trainloss](./github/trainloss6.png)|
+|Test ACC(73.45%)|![testacc](./github/testacc6.png)|Test Loss|![testloss](./github/testloss6.png)|
 ###### Training parameters1(Traversal + Cross Subject)
 |😀|😀|😀|😀|
 |----|----|----|----|
