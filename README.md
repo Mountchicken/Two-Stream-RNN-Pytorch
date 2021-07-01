@@ -133,6 +133,18 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 |----|----|----|----|
 |Train ACC(95.97%)|![trainacc](./github/trainacc3.png)|Train Loss|![trainloss](./github/trainloss3.png)|
 |Test ACC(65.9%)|![testacc](./github/testacc3.png)|Test Loss|![testloss](./github/testloss3.png)|
+###### Training parameters2(Traversal + Cross View)
+|😀|😀|😀|😀|
+|----|----|----|----|
+|Batch size|512|optimizer|Adam|
+|Learning rate|3e-4|Scheduler|MultiStep[15,30]|
+|Epochs|50||Device|GTX 2080Ti|
+|Sequence Type|Traversal|NTU RGB+D|Cross View|
+###### Training results2
+|😲|😲|😲|😲|
+|----|----|----|----|
+|Train ACC(93.84%)|![trainacc](./github/trainacc4.png)|Train Loss|![trainloss](./github/trainloss4.png)|
+|Test ACC(74.5%)|![testacc](./github/testacc4.png)|Test Loss|![testloss](./github/testloss4.png)|
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
