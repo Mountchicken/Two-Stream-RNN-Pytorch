@@ -17,9 +17,10 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 ||6/19|[***~~the fixed version of the model~~***](./model.py)|
 ||6/30|[the final version of the model](./model.py)|
 |dataset|6/18|[How to creat dataloader from downloding to implementation](#dataset)|
-|train|6/19|[It's time to burn your gpu now my friend](#train)|
-||6/30|[Fixed a bunch of bugs and can work fine now|(#train)|
-|checkpoint|6/20|***~[First checkpoint](#checkpoint)~***|
+||6/30|[How to use 3D transform](#dataset)|
+|train|6/19|***~~[It's time to burn your gpu now my friend](#train)~~***|
+||6/30|[Fixed a bunch of bugs and can work fine now](#train)|
+|checkpoint|6/20|***~~[First checkpoint](#checkpoint)~~***|
 ||6/22|***~~[Second checkpoint](#checkpoint)~~***|
 ||6/30|[Fix bugs](#checkpoint)|
 ****
