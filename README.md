@@ -90,7 +90,7 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 - In `train.py` from line 84 to line 111, you can choose the different conbination of the two stream model. It will be easy to understand if you had checked the paper
 ****
 ### result
-![result](./github/result.jpg)
+![result](./github/result.JPG)
 # Email Address
 email me if you have any emergency issue
 - mountchicken@outlook.com
