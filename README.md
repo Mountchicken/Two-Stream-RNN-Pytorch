@@ -87,7 +87,11 @@ to modify the number of epochs, watch out the multistep scheduler at line 116
 - In `train.py` from line 84 to line 111, you can choose the different conbination of the two stream model. It will be easy to understand if you had checked the paper
 ****
 ### Test
-#### Download checkpoints
+#### Download released checkpoints
+- download the checkpoints released
+- there are two checkpoints, one is for two-stream RNN without 3D transforms on cross view dataset and another is for two-stream RNN with 3D transforms on cross view dataset
+- At line78 in `test.py`, you can change the path of the two checkpoints
+- run `test.py`
 ****
 ### Result
 ![result](./github/result.JPG)
