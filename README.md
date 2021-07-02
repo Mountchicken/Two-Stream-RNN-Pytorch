@@ -14,7 +14,7 @@ This repository is one of my final examination, '*Deep Learning and Computer Vis
 |Part|Description|
 |----|----|
 |model|[the final version of the model](./model.py)|
-|dataset[How to creat dataloader from downloding to implementation](#Dataset)|
+|dataset|[How to creat dataloader from downloding to implementation](#Dataset)|
 ||[How to use 3D transform](#Dataset)|
 |train|[Fixed a bunch of bugs and can work fine now](#Train)|
 |test|[to test all the checkpoints](#Test)|
