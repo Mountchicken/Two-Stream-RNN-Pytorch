@@ -69,7 +69,7 @@ data_path = "NTU-RGB-D/xview/val_data.npy"
                      random_move=True,
                      random_rotate=0.2,
                      window_size=100,
-                     normalization=True,
+                     normalization=False,
                      debug=False,
                      origin_transfer=False)
                      
