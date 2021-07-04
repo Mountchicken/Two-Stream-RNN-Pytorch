@@ -46,7 +46,7 @@ def train():
                      random_shift=False,
                      random_move=False,
                      window_size=100,
-                     normalization=True,
+                     normalization=False,
                      debug=False,
                      origin_transfer=False)
 
@@ -66,7 +66,7 @@ def train():
                      random_shift=False,
                      random_move=False,
                      window_size=100,
-                     normalization=True,
+                     normalization=False,
                      debug=False,
                      origin_transfer=False)
     test_loader = torch.utils.data.DataLoader(
