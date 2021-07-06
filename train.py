@@ -33,18 +33,19 @@ def test(network,testloader,criterion):
 def train():
     # Hyperparameters:
     batch_size = 256
-    learning_rate = 0.02
-    num_epochs = 300
+    learning_rate = 3e-4
+    num_epochs = 50
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load Trainset
     print('Load Trainset')
-    data_path = "NTU-RGB-D/xview/val_data.npy"
-    label_path = "NTU-RGB-D/xview/val_label.pkl"
-    num_frame_path = "NTU-RGB-D/xview/val_num_frame.npy"
+    data_path = "NTU-RGB-D/xview/train_data.npy"
+    label_path = "NTU-RGB-D/xview/train_label.pkl"
+    num_frame_path = "NTU-RGB-D/xview/train_num_frame.npy"
     train_set = Feeder(data_path, label_path, num_frame_path, random_valid_choose=False,
                      random_shift=False,
                      random_move=False,
+                     #rand_rotate=0.1,
                      window_size=100,
                      normalization=False,
                      debug=False,
@@ -72,6 +73,7 @@ def train():
     test_loader = torch.utils.data.DataLoader(
         dataset=test_set,
         batch_size=batch_size,
+        drop_last=False,
         shuffle=False,
         num_workers=1, 
         pin_memory=True)
@@ -81,8 +83,8 @@ def train():
     print('Initializing Network')
 
     """temporal rnn"""
-    temporal_type = 'hierarchical_rnn'
-    #temporal_type = 'stacked_rnn'
+    #temporal_type = 'hierarchical_rnn'
+    temporal_type = 'stacked_rnn'
     stacked_rnn_order = None
     hierachical_rnn_order = [[8,9,19,11,23,24], #左臂 6点
                       [4,5,6,7,21,22], # 右臂 6点
@@ -91,8 +93,8 @@ def train():
                       [12,13,14,15], #右腿 4点
     ]
     """spatial rnn"""
-    spatial_type = 'traversal'
-    #spatial_type = 'chain'
+    #spatial_type = 'traversal'
+    spatial_type = 'chain'
     traversal_rnn_order = [20,8,9,10,11,23,24,23,11,10,9,8,4,5,6,7,21,22,21,7,6,5,4,20,
                            2,3,2,1,0,
                            16,17,18,19,18,17,16,0,12,13,14,15,14,13,12,0,
@@ -112,8 +114,15 @@ def train():
     network = network.to(device)
 
     optimizer = optim.Adam(network.parameters(), lr=learning_rate)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,milestones=[15,30],gamma=0.1)
+    # ckp = torch.load('100model.pt',map_location='cuda')
+    # network.load_state_dict(ckp['network'])
+    # optimizer.load_state_dict(ckp['optimizer'])
+
     criterion = nn.NLLLoss()
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,milestones=[100,160,220],gamma=0.1)
+    #test_loss , test_correct = test(network,test_loader,criterion)
+    #print('test_correct:',test_correct)
+
     comment=f'TwoStreamRNN batch_size={batch_size} lr={learning_rate} device={device}'
     tb=SummaryWriter(comment=comment)
 
@@ -149,8 +158,14 @@ def train():
         scheduler.step()
         '''只保存测试集准确率不断上升的epoch'''
         if testset_acc > best_acc:
-            torch.save(network.state_dict(),'./best_model.pt')
+            ckp = {'network':network.state_dict(),
+                    'optimizer':optimizer.state_dict()}
+            torch.save(ckp,'./best_model.pt')
             best_acc = testset_acc
+        if epoch % 100 == 0:
+            ckp = {'network':network.state_dict(),
+                    'optimizer':optimizer.state_dict()}
+            torch.save(ckp,f'./{str(epoch)}model.pt')
         print("epoch: ",epoch,"loss: ",train_avg_loss,"Train acc: ",trainset_acc,"Test acc: ",testset_acc)
     tb.close()
 
